@@ -22,10 +22,14 @@
         </dependency>
         <dependency>
             <groupId>com.graphhopper</groupId>
+            <artifactId>graphhopper</artifactId>
+            <version>0.3</version>
+        </dependency>
+        <dependency>
+            <groupId>com.graphhopper</groupId>
             <artifactId>graphhopper-web</artifactId>
             <version>0.3</version>
         </dependency>
-        
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
