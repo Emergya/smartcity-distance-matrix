@@ -1,10 +1,9 @@
 package com.emergya.smc.dm;
 
-import java.util.LinkedList;
 import java.util.List;
 
-import org.eclipse.jetty.util.ajax.JSON;
-import org.geojson.Geometry;
+import javax.annotation.PostConstruct;
+
 import org.geojson.LineString;
 import org.geojson.LngLatAlt;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,8 +12,8 @@ import org.springframework.stereotype.Component;
 import com.emergya.smc.model.Stop;
 import com.graphhopper.GHRequest;
 import com.graphhopper.GHResponse;
-import com.graphhopper.GraphHopperAPI;
-import com.graphhopper.http.GraphHopperWeb;
+import com.graphhopper.GraphHopper;
+import com.graphhopper.routing.util.EncodingManager;
 import com.graphhopper.util.PointList;
 
 /**
@@ -24,25 +23,30 @@ import com.graphhopper.util.PointList;
 @Component
 public class DistanceMatrixHandler {
 	
-	@Value("${smc.dm.graphhopperURL}")
-    private String GRAPHHHOPPER_URL;
+	@Value("${smc.dm.osmFilePath}")
+	private String OSM_FILE_PATH;
+	@Value("${smc.dm.graphPath}")
+	private String GRAPH_PATH;
+	@Value("${smc.dm.vehicle}")
+	private String VEHICLE;
+	@Value("${smc.dm.weighting}")
+	private String WEIGHTING;
 	
-	private GraphHopperAPI gh;
+	private GraphHopper hopper;
 	
 	public DistanceMatrixCell[][] calculateDistanceMatrix(final List<Stop> stops){
 		DistanceMatrixCell[][] matrix = new DistanceMatrixCell[stops.size()][stops.size()];
-		if (gh == null) {
-            gh = new GraphHopperWeb();
-            gh.load(this.GRAPHHHOPPER_URL);
-        }
+		
 		for(int i=0; i<stops.size(); i++){
 			for(int j=0; j<stops.size(); j++){
 				if(i!=j){
 					Stop startStop = stops.get(i);
 					Stop endStop = stops.get(j);
-					GHRequest request = new GHRequest(startStop.getLatitude(), startStop.getLongitude(), endStop.getLatitude(), endStop.getLongitude());
+					GHRequest request = new GHRequest(startStop.getLatitude(), startStop.getLongitude(), endStop.getLatitude(), endStop.getLongitude()).
+						    setWeighting(this.WEIGHTING).
+						    setVehicle(this.VEHICLE);
 					try {
-	                    GHResponse response = gh.route(request);
+	                    GHResponse response = hopper.route(request);
 	                    Double d = response.getDistance();
 	                    Long t = response.getMillis();
 	                    PointList points = response.getPoints();
@@ -58,6 +62,17 @@ public class DistanceMatrixHandler {
 			}
 		}
 		return matrix;
+	}
+	
+	@PostConstruct
+	public void init(){
+		hopper = new GraphHopper().forServer();
+		hopper.setInMemory(true);
+		hopper.setOSMFile(this.OSM_FILE_PATH);
+		hopper.setGraphHopperLocation(this.GRAPH_PATH);
+		hopper.setEncodingManager(new EncodingManager(this.VEHICLE));
+		
+		hopper.importOrLoad();
 	}
 	
 	private LineString getRoute(PointList points){
