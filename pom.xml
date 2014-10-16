@@ -35,6 +35,12 @@
             </properties>
         </profile>
         <profile>
+            <id>digitalocean</id>  
+            <properties>
+                <profile.properties>digitalocean.properties</profile.properties>
+            </properties>
+        </profile>
+        <profile>
             <id>prod</id>                          
             <properties>
                 <profile.properties>prod.properties</profile.properties>
