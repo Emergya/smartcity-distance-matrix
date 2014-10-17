@@ -5,7 +5,8 @@
  */
 
 var mtsp = {
-    stopList: [],
+    stopsFrom: [],
+    stopsTo: [],
     map: null,
     routesGroup: null,
     initMap: function () {
@@ -20,21 +21,43 @@ var mtsp = {
             attribution: 'Tiles courtesy of <a href="http://openstreetmap.se/" target="_blank">OpenStreetMap Sweden</a> &mdash; Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
             maxZoom: 18
         }).addTo(map);
-
-        map.on("click", function (e) {
-            mtsp.stopList.push({
-                name: "Stop",
-                latitude: e.latlng.lat,
-                longitude: e.latlng.lng
-            });
-
-            L.marker([e.latlng.lat, e.latlng.lng]).addTo(map);
-
-            $("#stopList").append("<li>" + e.latlng.lat + ", " + e.latlng.lng + "</li>");
-        });
-
+        
         mtsp.map = map;
 
+    },
+    
+    onClickFrom: function(e){
+    	mtsp.stopsFrom.push({
+            name: "Stop",
+            latitude: e.latlng.lat,
+            longitude: e.latlng.lng
+        });
+
+        L.marker([e.latlng.lat, e.latlng.lng]).addTo(mtsp.map);
+
+        $("#stopList").append("<li>" + e.latlng.lat + ", " + e.latlng.lng + "</li>");
+    },
+    
+    onClickTo: function(e){
+    	mtsp.stopsTo.push({
+            name: "Stop",
+            latitude: e.latlng.lat,
+            longitude: e.latlng.lng
+        });
+
+        L.marker([e.latlng.lat, e.latlng.lng]).addTo(mtsp.map);
+
+        $("#stopList").append("<li>" + e.latlng.lat + ", " + e.latlng.lng + "</li>");
+    },
+    
+    getStopsFrom: function(){
+    	mtsp.map.off("click", this.onClickTo);
+    	mtsp.map.on("click", this.onClickFrom);
+    },
+    
+    getStopsTo: function(){
+    	mtsp.map.off("click", this.onClickFrom);
+    	mtsp.map.on("click", this.onClickTo);
     },
     
     calculateRoutes: function () {
@@ -43,14 +66,14 @@ var mtsp = {
         $.ajax({
             method: "POST",
             url: "dm/calculateDM",
-            data: JSON.stringify({stops: mtsp.stopList}),
+            data: JSON.stringify({stopsFrom: mtsp.stopsFrom, stopsTo: mtsp.stopsTo}),
             success: function (data) {
                 console.debug(data);
+                var color = null;
                 for(var i=0; i<data.length; i++){
-                	for(var j=0; j<data.length; j++){
-                		if(i!=j){
-                			L.geoJson(data[i][j].route, {"color": calculateRouteThis.get_random_color()}).addTo(calculateRouteThis.map);
-                		}
+                	color = calculateRouteThis.get_random_color();
+                	for(var j=0; j<data[i].length; j++){
+                		L.geoJson(data[i][j].route, {"color": color}).addTo(calculateRouteThis.map);
                 	}
                 }
             },

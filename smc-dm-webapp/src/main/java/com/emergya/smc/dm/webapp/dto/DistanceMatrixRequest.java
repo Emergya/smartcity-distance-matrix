@@ -11,13 +11,22 @@ import com.emergya.smc.model.Stop;
 */
 public class DistanceMatrixRequest implements Serializable {
 
-	private List<Stop> stops;
+	private List<Stop> stopsFrom;
+	private List<Stop> stopsTo;
 
-	public List<Stop> getStops() {
-		return stops;
+	public List<Stop> getStopsFrom() {
+		return stopsFrom;
 	}
 
-	public void setStops(List<Stop> stops) {
-		this.stops = stops;
+	public void setStopsFrom(List<Stop> stopsFrom) {
+		this.stopsFrom = stopsFrom;
+	}
+	
+	public List<Stop> getStopsTo() {
+		return stopsTo;
+	}
+
+	public void setStopsTo(List<Stop> stopsTo) {
+		this.stopsTo = stopsTo;
 	}
 }

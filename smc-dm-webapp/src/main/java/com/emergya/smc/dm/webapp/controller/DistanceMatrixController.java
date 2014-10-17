@@ -31,7 +31,13 @@ public class DistanceMatrixController {
 	@ResponseBody
     @RequestMapping(value = "calculateDM", method = RequestMethod.POST)
     public DistanceMatrixCell[][] calculateMTSP(@RequestBody DistanceMatrixRequest request) {
-        return dmhandler.calculateDistanceMatrix(request.getStops());
+		DistanceMatrixCell[][] matrix = null;
+		if(request.getStopsTo().size() != 0){
+			matrix = dmhandler.calculateDistanceMatrix(request.getStopsFrom(), request.getStopsTo());
+		}else{
+			matrix = dmhandler.calculateDistanceMatrix(request.getStopsFrom(), request.getStopsFrom());
+		}
+        return matrix;
     }
 
 }
