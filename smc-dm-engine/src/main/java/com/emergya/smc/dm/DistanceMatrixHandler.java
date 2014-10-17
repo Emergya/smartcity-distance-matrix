@@ -34,31 +34,26 @@ public class DistanceMatrixHandler {
 	
 	private GraphHopper hopper;
 	
-	public DistanceMatrixCell[][] calculateDistanceMatrix(final List<Stop> stops){
-		DistanceMatrixCell[][] matrix = new DistanceMatrixCell[stops.size()][stops.size()];
-		
-		for(int i=0; i<stops.size(); i++){
-			for(int j=0; j<stops.size(); j++){
-				if(i!=j){
-					Stop startStop = stops.get(i);
-					Stop endStop = stops.get(j);
-					GHRequest request = new GHRequest(startStop.getLatitude(), startStop.getLongitude(), endStop.getLatitude(), endStop.getLongitude()).
-						    setWeighting(this.WEIGHTING).
-						    setVehicle(this.VEHICLE);
-					try {
-	                    GHResponse response = hopper.route(request);
-	                    Double d = response.getDistance();
-	                    Long t = response.getMillis();
-	                    PointList points = response.getPoints();
-	                    LineString route = this.getRoute(points);
-	                    DistanceMatrixCell dmc = new DistanceMatrixCell(d, t, route);
-	                    matrix[i][j] = dmc;
-	                } catch(Exception e){
-	                	
-	                }
-				}else{
-					matrix[i][j] = null;
-				}
+	public DistanceMatrixCell[][] calculateDistanceMatrix(final List<Stop> stopsFrom, final List<Stop> stopsTo){
+		DistanceMatrixCell[][] matrix = new DistanceMatrixCell[stopsFrom.size()][stopsTo.size()];
+		for(int i=0; i<stopsFrom.size(); i++){
+			for(int j=0; j<stopsTo.size(); j++){
+				Stop startStop = stopsFrom.get(i);
+				Stop endStop = stopsTo.get(j);
+				GHRequest request = new GHRequest(startStop.getLatitude(), startStop.getLongitude(), endStop.getLatitude(), endStop.getLongitude()).
+					    setWeighting(this.WEIGHTING).
+					    setVehicle(this.VEHICLE);
+				try {
+                    GHResponse response = hopper.route(request);
+                    Double d = response.getDistance();
+                    Long t = response.getMillis();
+                    PointList points = response.getPoints();
+                    LineString route = this.getRoute(points);
+                    DistanceMatrixCell dmc = new DistanceMatrixCell(d, t, route);
+                    matrix[i][j] = dmc;
+                } catch(Exception e){
+                	
+                }
 			}
 		}
 		return matrix;

@@ -22,5 +22,9 @@
                 
             </ul>
         </div>
+        <div id="buttons">
+        	<button type="button" onclick="mtsp.getStopsFrom()">Add Stops From</button>
+        	<button type="button" onclick="mtsp.getStopsTo()">Add Stops To</button>
+        </div>
     </body>
 </html>
