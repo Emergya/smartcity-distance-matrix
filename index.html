@@ -19,7 +19,7 @@
           <a id="forkme_banner" href="https://github.com/Emergya/smartcity-distance-matrix">View on GitHub</a>
 
           <h1 id="project_title">Smartcity-distance-matrix</h1>
-          <h2 id="project_tagline">Project to calculate a distance matrix based on graph hopper engine.</h2>
+          <h2 id="project_tagline">Smartcity-distance-matrix is a web service based on graph hopper engine to calculate a distance matrix</h2>
 
             <section id="downloads">
               <a class="zip_download_link" href="https://github.com/Emergya/smartcity-distance-matrix/zipball/master">Download this project as a .zip file</a>
@@ -31,10 +31,36 @@
     <!-- MAIN CONTENT -->
     <div id="main_content_wrap" class="outer">
       <section id="main_content" class="inner">
-        <h1>
-<a name="smartcity-distance-matrix" class="anchor" href="#smartcity-distance-matrix"><span class="octicon octicon-link"></span></a>smartcity-distance-matrix</h1>
-
-<p>Project to calculate a distance matrix based on graph hopper engine.</p>
+        <h2>Quick Start Guide</h2>
+        <p>This step-by-step guide will quickly get you started on Web Service basics, including setting up a SmartCity Distance Matrix Web Service, working with request to get a distance matrix of one-by-one distance and multyples sources and targets. This service also permits you do request to get the geometry route for each distance pair.</p>
+        <h2>Introduction</h2>
+        <p>There are two posibilities to get the distance matrix, one of them with the geometry route in the response and another one without it. We have differentiated two methods in the API Rest to do that.</p>
+        <h3>Request without geometry route</h3>
+        <p>To do a request to get the distance matrix without the geometry route inside, we need to know the URL that we use to do the request. This URL changes depending on the use we want to give it. The method that we call will be:</p>
+        <pre>
+          http://hostname:port/web_name/dm/calculateDM
+        </pre>
+        <p>Where each part of the URL wil be:</p>
+        <ul>
+          <li>hostname: the server name where the web has been deployed</li>
+          <li>port: the server port where the web has been deployed</li>
+          <li>web_name: the server web name that it has been deployed</li>
+        </ul>
+        <h3>Request with geometry route</h3>
+        <p>To do a request to get the distance matrix with the geometry route inside, we need to know the URL that we use to do the request. This URL changes depending on the use we want to give it. The method that we call will be:</p>
+        <pre>
+          http://hostname:port/web_name/dm/calculateRouteDM
+        </pre>
+        <p>Where each part of the URL wil be:</p>
+        <ul>
+          <li>hostname: the server name where the web has been deployed</li>
+          <li>port: the server port where the web has been deployed</li>
+          <li>web_name: the server web name that it has been deployed</li>
+        </ul>
+        <h2>Request One-by-One</h2>
+        <p>To do a request to get one-by-one distance points, you need to know the end point of the web service. This end point will be the next URL:</p>
+        
+        <h2>Request Multiples Sources and Targets</h2>
       </section>
     </div>
 
@@ -45,8 +71,5 @@
         <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
       </footer>
     </div>
-
-    
-
   </body>
 </html>
