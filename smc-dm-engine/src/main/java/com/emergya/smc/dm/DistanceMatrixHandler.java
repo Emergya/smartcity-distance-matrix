@@ -34,7 +34,7 @@ public class DistanceMatrixHandler {
 	
 	private GraphHopper hopper;
 	
-	public DistanceMatrixCell[][] calculateDistanceMatrix(final List<Stop> stopsFrom, final List<Stop> stopsTo){
+	public DistanceMatrixCell[][] getMatrix(final List<Stop> stopsFrom, final List<Stop> stopsTo, boolean geometry){
 		DistanceMatrixCell[][] matrix = new DistanceMatrixCell[stopsFrom.size()][stopsTo.size()];
 		for(int i=0; i<stopsFrom.size(); i++){
 			for(int j=0; j<stopsTo.size(); j++){
@@ -47,8 +47,11 @@ public class DistanceMatrixHandler {
                     GHResponse response = hopper.route(request);
                     Double d = response.getDistance();
                     Long t = response.getMillis();
-                    PointList points = response.getPoints();
-                    LineString route = this.getRoute(points);
+                    LineString route = null;
+                    if(geometry){
+                    	PointList points = response.getPoints();
+                    	route = this.getRoute(points);
+                    }
                     DistanceMatrixCell dmc = new DistanceMatrixCell(d, t, route);
                     matrix[i][j] = dmc;
                 } catch(Exception e){
