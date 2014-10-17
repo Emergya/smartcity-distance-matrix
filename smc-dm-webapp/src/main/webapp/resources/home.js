@@ -65,7 +65,7 @@ var mtsp = {
         var calculateRouteThis = this;
         $.ajax({
             method: "POST",
-            url: "dm/calculateDM",
+            url: "dm/calculateRouteDM",
             data: JSON.stringify({stopsFrom: mtsp.stopsFrom, stopsTo: mtsp.stopsTo}),
             success: function (data) {
                 console.debug(data);

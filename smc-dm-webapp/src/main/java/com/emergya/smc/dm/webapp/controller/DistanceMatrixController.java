@@ -33,11 +33,22 @@ public class DistanceMatrixController {
     public DistanceMatrixCell[][] calculateMTSP(@RequestBody DistanceMatrixRequest request) {
 		DistanceMatrixCell[][] matrix = null;
 		if(request.getStopsTo().size() != 0){
-			matrix = dmhandler.calculateDistanceMatrix(request.getStopsFrom(), request.getStopsTo());
+			matrix = dmhandler.getMatrix(request.getStopsFrom(), request.getStopsTo(), false);
 		}else{
-			matrix = dmhandler.calculateDistanceMatrix(request.getStopsFrom(), request.getStopsFrom());
+			matrix = dmhandler.getMatrix(request.getStopsFrom(), request.getStopsFrom(), false);
 		}
         return matrix;
     }
 
+	@ResponseBody
+    @RequestMapping(value = "calculateRouteDM", method = RequestMethod.POST)
+    public DistanceMatrixCell[][] calculateRouteDM(@RequestBody DistanceMatrixRequest request) {
+		DistanceMatrixCell[][] matrix = null;
+		if(request.getStopsTo().size() != 0){
+			matrix = dmhandler.getMatrix(request.getStopsFrom(), request.getStopsTo(), true);
+		}else{
+			matrix = dmhandler.getMatrix(request.getStopsFrom(), request.getStopsFrom(), true);
+		}
+        return matrix;
+    }
 }
