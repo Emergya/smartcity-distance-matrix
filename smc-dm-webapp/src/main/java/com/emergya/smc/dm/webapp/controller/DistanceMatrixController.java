@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.emergya.smc.dm.DistanceMatrixCell;
 import com.emergya.smc.dm.DistanceMatrixHandler;
@@ -39,6 +40,14 @@ public class DistanceMatrixController {
 		}
         return matrix;
     }
+	
+	@ResponseBody
+    @RequestMapping(value = "calculateDM", method = RequestMethod.GET)
+    public ModelAndView calculateDM() {
+		ModelAndView model = new ModelAndView("error");
+		model.addObject("text", "Try using POST on /calculteDM path");
+		return model;
+    }
 
 	@ResponseBody
     @RequestMapping(value = "calculateRouteDM", method = RequestMethod.POST)
@@ -50,5 +59,13 @@ public class DistanceMatrixController {
 			matrix = dmhandler.getMatrix(request.getStopsFrom(), request.getStopsFrom(), true);
 		}
         return matrix;
+    }
+	
+	@ResponseBody
+    @RequestMapping(value = "calculateRouteDM", method = RequestMethod.GET)
+    public ModelAndView calculateRouteDM() {
+		ModelAndView model = new ModelAndView("error");
+		model.addObject("text", "Try using POST on /calculteRouteDM path");
+		return model;
     }
 }
