@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="description" content="Smartcity-distance-matrix : Project to calculate a distance matrix based on graph hopper engine.">
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Smartcity-distance-matrix</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/Emergya/smartcity-distance-matrix">View on GitHub</a>
+
+          <h1 id="project_title">Smartcity-distance-matrix</h1>
+          <h2 id="project_tagline">Smartcity-distance-matrix is a web service based on graph hopper engine to calculate a distance matrix</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/Emergya/smartcity-distance-matrix/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/Emergya/smartcity-distance-matrix/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h2>Quick Start Guide</h2>
+        <p>This step-by-step guide will quickly get you started on Web Service basics, including setting up a SmartCity Distance Matrix Web Service, working with request to get a distance matrix of one-by-one distance and multyples sources and targets. This service also permits you do request to get the geometry route for each distance pair.</p>
+        <h2>Introduction</h2>
+        <p>There are two posibilities to get the distance matrix, one of them with the geometry route in the response and another one without it. We have differentiated two methods in the API Rest to do that.</p>
+        <h3>Request without geometry route</h3>
+        <p>To do a request to get the distance matrix without the geometry route inside, we need to know the URL that we use to do the request. This route will be:</p>
+        <pre>
+          http://geolab.emergya.com:8080/smc-dm-webapp/dm/calculateDM
+        </pre>
+        <p>The content type of the request could be "application/json" and the request payload to send into the request could be like this:</p>
+        <pre>
+          {
+            stopsFrom: [
+              {
+                name: "-", 
+                latitude: -, 
+                longitude: -
+              },{
+                name: "-", 
+                latitude: -, 
+                longitude: -
+              }
+            ],
+            stopsTo: [
+              {
+                name: "-", 
+                latitude: -, 
+                longitude: -
+              },{
+                name: "-", 
+                latitude: -, 
+                longitude: -
+              }],
+          }
+        </pre>
+        <p>The structure of this javascript object will be composed by:</p>
+        <ul>
+          <li>Source stops array (stopsFrom), array with the origin stops</li>
+          <li>Target stops array (stopsTo), array with the target stops</li>
+          <li>Stops, javascript objects will be composed by:</li>
+          <ul>
+            <li>Name, the stop name</li>
+            <li>Latitude, latitude coordinate from the stop</li>
+            <li>Longitude, longitude coordinate from the stop</li>
+          </ul>
+        </ul>
+        <p>The request payload will be a javascript object that contains two stops arrays, one of them will be for the source stops and another one for the target stops. Both of them will be used to get a distance matrix but with the next difference</p>
+        <ul>
+          <li>All to all stops distances, to calculate the distance between all stops with themselves only we need to define one of both array, stopsFrom, because this array will be used like source and target of the distance matrix.</li>
+          <li>From source stops to target stops, we will use this option if we want to get the distance from a source stops set to a target stops set. That's mean from origin stops into source array to target stops into target array.</li>
+        </ul>
+        <h4>Example</h4>
+        <p>Request to get all to all distance matrix without route geometry</p>
+        <pre>
+          URL: http://geolab.emergya.com:8080/smc-dm-webapp/dm/calculateDM
+          Content-Type: application/json
+          Request Payload:
+            {
+              "stopsFrom":[
+                {
+                  "name": "Stop",
+                  "latitude": 37.381479570881254,
+                  "longitude": -6.006603240966797
+                },{
+                  "name": "Stop",
+                  "latitude": 37.39239109710796,
+                  "longitude": -5.997161865234375
+                },{
+                  "name": "Stop",
+                  "latitude": 37.39730076580449,
+                  "longitude": -5.986518859863281
+                }
+              ],
+              "stopsTo":[]
+            }
+        </pre>
+        <p>The response to the request will be a json with an array fo arrays object like this:</p>
+        <pre>
+          [
+            [
+              {
+                distance: 5935.382040477246,
+                route: null,
+                time: 393902
+              },{
+                distance: 5935.382040477246,
+                route: null,
+                time: 393902
+              },{
+                distance: 5935.382040477246,
+                route: null,
+                time: 393902
+              }
+            ],[...]
+          ]
+        </pre>
+        <h4>Example</h4>
+        <p>Request to get from source to target distance matrix without route geometry</p>
+        <pre>
+          URL: http://geolab.emergya.com:8080/smc-dm-webapp/dm/calculateDM
+          Content-Type: application/json
+          Request Payload:
+            {
+              "stopsFrom":[
+                {
+                  "name": "Stop",
+                  "latitude": 37.381479570881254,
+                  "longitude": -6.006603240966797
+                },{
+                  "name": "Stop",
+                  "latitude": 37.39239109710796,
+                  "longitude": -5.997161865234375
+                },{
+                  "name": "Stop",
+                  "latitude": 37.39730076580449,
+                  "longitude": -5.986518859863281
+                }
+              ],
+              "stopsTo":[
+                {
+                  "name": "Stop",
+                  "latitude": 37.36238057913134,
+                  "longitude": -5.962486267089843
+                },{
+                  "name": "Stop",
+                  "latitude": 37.39020891890479,
+                  "longitude": -5.952014923095703
+                }
+              ]
+            }
+        </pre>
+        <p>The response to the request will be a json with an array fo arrays object like this:</p>
+        <pre>
+          [
+            [
+              {
+                distance: 5935.382040477246,
+                route: null,
+                time: 393902
+              },{
+                distance: 5935.382040477246,
+                route: null,
+                time: 393902
+              },{
+                distance: 5935.382040477246,
+                route: null,
+                time: 393902
+              }
+            ],[...]
+          ]
+        </pre>
+        <h3>Request with geometry route</h3>
+        <p>To do a request to get the distance matrix with the geometry route inside, we need to know the URL that we use to do the request. This route will be:</p>
+        <pre>
+          http://geolab.emergya.com:8080/smc-dm-webapp/dm/calculateRouteDM
+        </pre>
+        <p>The content type of the request could be "application/json" and the request payload to send into the request could be like before one</p>
+        <h4>Example</h4>
+        <p>Request to get all to all distance matrix with route geometry</p>
+        <pre>
+          URL: http://geolab.emergya.com:8080/smc-dm-webapp/dm/calculateRouteDM
+          Content-Type: application/json
+          Request Payload:
+            {
+              "stopsFrom":[
+                {
+                  "name": "Stop",
+                  "latitude": 37.381479570881254,
+                  "longitude": -6.006603240966797
+                },{
+                  "name": "Stop",
+                  "latitude": 37.39239109710796,
+                  "longitude": -5.997161865234375
+                },{
+                  "name": "Stop",
+                  "latitude": 37.39730076580449,
+                  "longitude": -5.986518859863281
+                }
+              ],
+              "stopsTo":[]
+            }
+        </pre>
+        <p>The response to the request will be a json with an array fo arrays object like this:</p>
+        <pre>
+          [
+            [
+              {
+                distance: 5935.382040477246,
+                route: {type:LineString, coordinates: [...]},
+                time: 393902
+              },{
+                distance: 5935.382040477246,
+                route: {type:LineString, coordinates: [...]},
+                time: 393902
+              },{
+                distance: 5935.382040477246,
+                route: {type:LineString, coordinates: [...]},
+                time: 393902
+              }
+            ],[...]
+          ]
+        </pre>
+        <h4>Example</h4>
+        <p>Request to get from source to target distance matrix with route geometry</p>
+        <pre>
+          URL: http://geolab.emergya.com:8080/smc-dm-webapp/dm/calculateRouteDM
+          Content-Type: application/json
+          Request Payload:
+            {
+              "stopsFrom":[
+                {
+                  "name": "Stop",
+                  "latitude": 37.381479570881254,
+                  "longitude": -6.006603240966797
+                },{
+                  "name": "Stop",
+                  "latitude": 37.39239109710796,
+                  "longitude": -5.997161865234375
+                },{
+                  "name": "Stop",
+                  "latitude": 37.39730076580449,
+                  "longitude": -5.986518859863281
+                }
+              ],
+              "stopsTo":[
+                {
+                  "name": "Stop",
+                  "latitude": 37.36238057913134,
+                  "longitude": -5.962486267089843
+                },{
+                  "name": "Stop",
+                  "latitude": 37.39020891890479,
+                  "longitude": -5.952014923095703
+                }
+              ]
+            }
+        </pre>
+        <p>The response to the request will be a json with an array fo arrays object like this:</p>
+        <pre>
+          [
+            [
+              {
+                distance: 5935.382040477246,
+                route: {type:LineString, coordinates: [...]},
+                time: 393902
+              },{
+                distance: 5935.382040477246,
+                route: {type:LineString, coordinates: [...]},
+                time: 393902
+              },{
+                distance: 5935.382040477246,
+                route: {type:LineString, coordinates: [...]},
+                time: 393902
+              }
+            ],[...]
+          ]
+        </pre>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Smartcity-distance-matrix maintained by <a href="https://github.com/Emergya">Emergya</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+  </body>
+</html>
