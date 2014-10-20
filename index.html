@@ -40,7 +40,7 @@
         <pre>
           http://geolab.emergya.com:8080/smc-dm-webapp/dm/calculateDM
         </pre>
-        <p>The content type of the request could be "application/json" and the request payload to send into the request could be like this:</p>
+        <p>The content type of the request could be "application/json", the request method could be POST and the request payload to send into the request could be like this:</p>
         <pre>
           {
             stopsFrom: [
@@ -86,6 +86,7 @@
         <p>Request to get all to all distance matrix without route geometry</p>
         <pre>
           URL: http://geolab.emergya.com:8080/smc-dm-webapp/dm/calculateDM
+          Method: POST
           Content-Type: application/json
           Request Payload:
             {
@@ -131,6 +132,7 @@
         <p>Request to get from source to target distance matrix without route geometry</p>
         <pre>
           URL: http://geolab.emergya.com:8080/smc-dm-webapp/dm/calculateDM
+          Method: POST
           Content-Type: application/json
           Request Payload:
             {
@@ -187,11 +189,12 @@
         <pre>
           http://geolab.emergya.com:8080/smc-dm-webapp/dm/calculateRouteDM
         </pre>
-        <p>The content type of the request could be "application/json" and the request payload to send into the request could be like before one</p>
+        <p>The content type of the request could be "application/json", the request method could be POST and the request payload to send into the request could be like before one</p>
         <h4>Example</h4>
         <p>Request to get all to all distance matrix with route geometry</p>
         <pre>
           URL: http://geolab.emergya.com:8080/smc-dm-webapp/dm/calculateRouteDM
+          Method: POST
           Content-Type: application/json
           Request Payload:
             {
@@ -237,6 +240,7 @@
         <p>Request to get from source to target distance matrix with route geometry</p>
         <pre>
           URL: http://geolab.emergya.com:8080/smc-dm-webapp/dm/calculateRouteDM
+          Method: POST
           Content-Type: application/json
           Request Payload:
             {
